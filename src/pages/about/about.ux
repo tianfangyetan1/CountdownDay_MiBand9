@@ -45,7 +45,6 @@ export default {
   // 设置时间刷新定时器
   onReady() {
     this.refreshTime()
-    this.refreshConvertNumber()
     setInterval(() => {
       this.refreshTime()
     }, 1000)
