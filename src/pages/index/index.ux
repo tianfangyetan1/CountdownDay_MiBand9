@@ -1,49 +1,241 @@
 <template>
-  <div class="demo-page">
-    <text class="title">{{ $t("a.b") }},欢迎打开{{ title }}</text>
-    <!-- 点击跳转详情页 -->
-    <input class="btn" type="button" value="跳转到详情页" onclick="routeDetail" />
-  </div>
+  <scroll scroll-y="{{true}}" class="scrool-page" bounces="{{true}}">
+    <div class="page">
+      
+      <!-- 标题和时间 -->
+      <div class="header">
+        <text class="time">{{hours}}:{{minute}}</text>
+        <text class="title">倒数日</text>
+      </div>
+      
+      <!-- 倒数日区域 -->
+      <div class="list">
+
+        <div class="item">
+          <text class="number">{{distace.day}}</text>
+          <text class="unit">天</text>
+        </div>
+
+        <div class="item">
+          <text class="number">{{distace.hour}}</text>
+          <text class="unit">小时</text>
+        </div>
+
+        <div class="item">
+          <text class="number">{{distace.minute}}</text>
+          <text class="unit">分钟</text>
+        </div>
+
+        <div class="item">
+          <text class="number">{{distace.second}}</text>
+          <text class="unit">秒</text>
+        </div>
+
+      </div>
+
+      <!-- “编辑”按钮 -->
+      <div class="edit" onclick="edit">
+        <text class="edit-text">编辑</text>
+      </div>
+
+      <!-- “关于”按钮 -->
+      <div class="about" onclick="about">
+        <text class="about-text">i</text>
+      </div>
+    </div>
+  </scroll>
 </template>
 
 <script>
-import router from "@system.router"
-import configuration from "@system.configuration"
+import router from '@system.router'
+import storage from '@system.storage' 
 
 export default {
-  // 页面级组件的数据模型，影响传入数据的覆盖机制：private内定义的属性不允许被覆盖
   private: {
-    title: "示例页面"
+    // 时间
+    hours: 0,
+    minute: 0,
+
+    // 时间刷新计时器ID
+    intervalId: null,
+
+    // 倒数日数据
+    data: '',
+
+    // 转换的数据
+    distace: {
+      day: 0,
+      hour: 0,
+      minute: 0,
+      second: 0
+    }
   },
 
-  routeDetail() {
-    // 跳转到应用内的某个页面，router用法详见：文档->接口->页面路由
+  // 设置时间刷新定时器
+  onReady() {
+    this.refreshTime()
+    this.intervalId = setInterval(() => {
+      this.refreshTime()
+    }, 1000)
+  },
+  
+  // 刷新时间
+  refreshTime() {
+    const now = new Date()
+    this.hours = now.getHours()
+    const minute = now.getMinutes()
+    if (minute < 10) {
+      this.minute = '0' + minute
+    } else {
+      this.minute = minute
+    }
+
+    // 刷新倒数日时间
+    const target = new Date(this.data)
+    const milliseconds = target.getTime() - now.getTime()
+
+    // 转换为其他单位
+    let seconds = milliseconds / 1000
+    let minutes = seconds / 60
+    let hours = minutes / 60
+
+    this.distace.day = parseInt(hours / 24)
+    this.distace.hour = parseInt(hours) % 24
+    this.distace.minute = parseInt(minutes) % 60
+    this.distace.second = parseInt(seconds) % 60
+
+  },
+
+  // 销毁定时器
+  onDestroy() {
+    clearInterval(this.intervalId)
+  },
+
+  // 获取数据
+  onShow() {
+    this.getData()
+  },
+
+  // 从本地存储获取倒数日数据到 this.data
+  getData () {
+    storage.get({
+      key: 'appdata',
+      success: (data) => {
+        console.log('读取成功', data)
+        if (data == '') {
+          this.data = '2025-01-01T00:00:00'
+        } else {
+          this.data = data
+        }
+      },
+      fail: (data, code) => {
+        console.log('读取失败', code, data)
+      }
+    })
+  },
+
+  // 向本地存储保存倒数日数据
+  setData () {
+    storage.get({
+      key: 'appdata',
+      value: this.data,
+      success: (data) => {
+        console.log('保存成功', data)
+      },
+      fail: (data, code) => {
+        console.log('保存失败', code, data)
+      }
+    })
+  },
+
+  // 进入关于页面
+  about () {
     router.push({
-      uri: "/pages/detail"
+      uri: "/pages/about"
     })
   }
 }
 </script>
 
 <style>
-.demo-page {
+
+.scrool-page {
+  width: 192px;
+  height: 490px;
+}
+
+.page {
   flex-direction: column;
-  justify-content: center;
+  width: 192px;
+  height: 520px;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 10px;
+}
+
+.header {
+  width: 192px;
+  flex-direction: column;
   align-items: center;
+  padding-top: 20px;
+}
+
+.time {
+  font-size: 20px;
+  color: #eeeeee;
 }
 
 .title {
-  font-size: 20px;
-  text-align: center;
+  font-size: 25px;
 }
 
-.btn {
-  width: 200px;
-  height: 40px;
-  margin-top: 20px;
-  border-radius: 5px;
-  background-color: #09ba07;
-  font-size: 20px;
-  color: #ffffff;
+.list {
+  flex-direction: column;
+  align-items: center;
 }
+
+.unit {
+  padding: 20px 10px 10px 10px;
+}
+
+.number {
+  background-color: #222222;
+  padding: 10px;
+  border-radius: 10px;
+  /* font-size: 25px; */
+}
+
+.number {
+  /* font-size: 20px; */
+  margin-top: 10px;
+}
+
+.edit {
+  margin: 10px 0 5px 56px;
+  width: 80px;
+  height: 54px;
+  padding: 8px;
+  border-radius: 50%; 
+  background-color: #0085A6;
+  align-items: center;
+  justify-content: center;
+}
+
+.about {
+  margin-left: 73.5px;
+  margin-top: 10px;
+  width: 45px;
+  height: 45px;
+  font-size: 20px;
+  background-color: #525252;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.about-text {
+  font-size: 25px;
+}
+
 </style>

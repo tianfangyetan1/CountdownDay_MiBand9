@@ -105,7 +105,7 @@ export default {
 
 .sectionTitle {
   margin: 20px 5px 5px 5px;
-  color: #FF8515;
+  color: #0085A6;
 }
 
 .sectionTitle text {
