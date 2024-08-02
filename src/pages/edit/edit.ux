@@ -1,0 +1,214 @@
+<template>
+  <div class="page">
+
+    <!-- 保存键 -->
+    <div class="sepcialButton" onclick="save">
+      <text>保存</text>
+    </div>
+
+    <!-- 显示区域 -->
+    <text class="layout">{{splited}}</text>
+
+    <!-- 按钮区域 -->
+    <div class="footer">
+
+      <!-- 数值按钮 -->
+      <scroll scroll-x="{{true}}" class="buttonsContainer">
+        <div class="buttons">
+          <div class="button" for="{{(index, value) in btns}}" onclick="btn(value)">
+            <text>{{value}}</text>
+          </div>
+        </div>
+      </scroll>
+      
+      <!-- 删除键 -->
+      <div class="sepcialButton" onclick="backspace">
+        <text>删除</text>
+      </div>
+    </div>
+
+  </div>
+</template>
+
+<script>
+import vibrator from '@system.vibrator'
+import router from '@system.router'
+import file from '@system.file'
+
+export default {
+  private: {
+    // 时间
+    hours: 0,
+    minute: 0,
+
+    // 时间刷新计时器ID
+    intervalId: null,
+
+    // 倒数日数据
+    data: '',
+
+    btns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+  },
+
+  computed: {
+    // 分隔字符
+    splited () {
+      let a = [...this.data]
+      // 1000/00/00 00:00
+      if (a.length >= 4) {
+        a.splice(4, 0, '/')
+      }
+      if (a.length >= 7) {
+        a.splice(7, 0, '/')
+      }
+      if (a.length >= 10) {
+        a.splice(10, 0, ' ')
+      }
+      if (a.length >= 13) {
+        a.splice(13, 0, ':')
+      }
+      // console.log(a)
+      return a.join('')
+    }
+  },
+
+  // 设置时间刷新定时器
+  onReady() {
+    this.refreshTime()
+    this.intervalId = setInterval(() => {
+      this.refreshTime()
+    }, 1000)
+  },
+  
+  // 刷新时间
+  refreshTime() {
+    const now = new Date()
+    this.hours = now.getHours()
+    const minute = now.getMinutes()
+    if (minute < 10) {
+      this.minute = '0' + minute
+    } else {
+      this.minute = minute
+    }
+  },
+
+  // 按钮被点击
+  btn (value) {
+    vibrator.vibrate({
+      mode: 'short'
+    })
+    
+    if (this.data.length >= 12) {
+      return
+    }
+
+    this.data += String(value)
+  },
+
+  // 删除键被点击
+  backspace () {
+    vibrator.vibrate({
+      mode: 'short'
+    })
+
+    this.data = this.data.slice(0, this.data.length - 1)
+  },
+
+  // 保存键被点击
+  save () {
+    let a = [...this.splited]
+    a.splice(10, 1, 'T')
+    a.push(':00')
+    a.splice(4, 1, '-')
+    a.splice(7, 1, '-')
+
+    a = a.join('')
+    console.log(a)
+
+    // 向本地存储保存倒数日数据
+    file.writeText({
+      uri: 'internal://files/appdata.txt',
+      text: a,
+      success: () => {
+        console.log('保存成功')
+        router.back()
+      },
+      fail: (data, code) => {
+        console.log('保存失败', code, data)
+      }
+    })
+  }
+ }
+</script>
+
+<style>
+.page {
+  flex-direction: column;
+  width: 192px;
+  height: 520px;
+  margin: 0;
+  padding: 10px 0;
+  overflow: hidden;
+}
+
+.header {
+  width: 192px;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.time {
+  font-size: 20px;
+  color: #eeeeee;
+}
+
+.title {
+  font-size: 25px;
+}
+
+.layout {
+  width: 192px;
+  height: 120px;
+  background-color: #222222;
+  margin: 10px 0 5px 0;
+  padding: 10px;
+  border-radius: 10px;
+  /* font-size: 25px; */
+}
+
+.footer {
+  flex-direction: column;
+}
+
+.buttonsContainer {
+  width: 192px;
+}
+
+.buttons {
+  width: 256px;
+  flex-wrap: wrap;
+}
+
+.button {
+  width: 54px;
+  height: 54px;
+  margin: 5px;
+  background-color: #222222;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.sepcialButton {
+  margin: 4px 0 0 56px;
+  width: 80px;
+  height: 54px;
+  padding: 8px;
+  border-radius: 10px; 
+  background-color: #0085A6;
+  align-items: center;
+  justify-content: center;
+}
+
+</style>
