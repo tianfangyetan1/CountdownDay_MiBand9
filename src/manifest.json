@@ -8,11 +8,11 @@
   "deviceTypeList": [
     "watch"
   ],
-  "features": [
-    {
+  "features": [{
       "name": "system.router"
-    }
-  ],
+    }, {
+      "name": "system.storage"
+  }],
   "config": {
     "logLevel": "log",
     "designWidth": 192
@@ -25,9 +25,6 @@
       },
       "pages/edit": {
         "component": "edit"
-      },
-      "pages/create": {
-        "component": "create"
       },
       "pages/about": {
         "component": "about"
