@@ -1,0 +1,124 @@
+<template>
+  <div class="page">
+
+    <!-- 标题和时间 -->
+    <div class="header">
+      <text class="time">{{hours}}:{{minute}}</text>
+      <text class="title">关于进制转换</text>
+    </div>
+    
+    <div class="sectionTitle">
+      <text class="sectionTitle-text">开发者</text>
+    </div>
+
+    <div class="avatar">
+      <image static src="/common/avatar.jpg"></image>
+    </div>
+
+    <div class="content">
+      <text>天方夜谭</text>
+    </div>
+
+    <div class="sectionTitle">
+      <text class="sectionTitle-text">更新日志</text>
+    </div>
+
+    <div class="versionCode">
+      <text class="versionCode-text">v1.1</text>
+    </div>
+
+    <div class="content">
+      <text>优化界面</text>
+    </div>
+
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    // 时间
+    hours: 0,
+    minute: 0,
+  },
+
+  // 设置时间刷新定时器
+  onReady() {
+    this.refreshTime()
+    this.refreshConvertNumber()
+    setInterval(() => {
+      this.refreshTime()
+    }, 1000)
+  },
+
+  // 刷新时间
+  refreshTime() {
+    let time = new Date()
+    this.hours = time.getHours()
+    let minute = time.getMinutes()
+    if (minute < 10) {
+      this.minute = '0' + minute
+    } else {
+      this.minute = minute
+    }
+    time = null
+  },
+}
+</script>
+
+<style>
+.page {
+  flex-direction: column;
+  width: 192px;
+  height: 490px;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 10px;
+  overflow: hidden;
+}
+
+.header {
+  width: 192px;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.time {
+  font-size: 20px;
+  color: #eeeeee;
+}
+
+.title {
+  font-size: 25px;
+  color: white;
+}
+
+.avatar {
+  margin: 5px;
+}
+
+.content, .versionCode {
+  width: 182px;
+  margin: 5px;
+}
+
+.sectionTitle {
+  margin: 20px 5px 5px 5px;
+  color: #FF8515;
+}
+
+.sectionTitle text {
+  font-size: 20px;
+}
+
+.content text {
+  font-size: 22px;
+}
+
+.versionCode-text {
+  font-size: 18px;
+  color: #b0b0b0;
+}
+
+</style>

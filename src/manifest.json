@@ -28,6 +28,9 @@
       },
       "pages/create": {
         "component": "create"
+      },
+      "pages/about": {
+        "component": "about"
       }
     }
   }
