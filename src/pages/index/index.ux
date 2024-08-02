@@ -48,7 +48,7 @@
 
 <script>
 import router from '@system.router'
-import storage from '@system.storage' 
+import file from '@system.file'
 
 export default {
   private: {
@@ -94,7 +94,6 @@ export default {
     const target = new Date(this.data)
     const milliseconds = target.getTime() - now.getTime()
 
-    // 转换为其他单位
     let seconds = milliseconds / 1000
     let minutes = seconds / 60
     let hours = minutes / 60
@@ -116,35 +115,25 @@ export default {
     this.getData()
   },
 
-  // 从本地存储获取倒数日数据到 this.data
+  // 从本地存储获取倒数日数据
   getData () {
-    storage.get({
-      key: 'appdata',
+    file.readText({
+      uri: 'internal://files/appdata.txt',
       success: (data) => {
-        console.log('读取成功', data)
-        if (data == '') {
-          this.data = '2025-01-01T00:00:00'
-        } else {
-          this.data = data
-        }
+        console.log('读取成功', data.text)
+        this.data = data.text
       },
       fail: (data, code) => {
         console.log('读取失败', code, data)
+        this.data = '2025-01-01T00:00:00'
       }
     })
   },
 
-  // 向本地存储保存倒数日数据
-  setData () {
-    storage.get({
-      key: 'appdata',
-      value: this.data,
-      success: (data) => {
-        console.log('保存成功', data)
-      },
-      fail: (data, code) => {
-        console.log('保存失败', code, data)
-      }
+  // 进入编辑界面
+  edit () {
+    router.push({
+      uri: "/pages/edit"
     })
   },
 
