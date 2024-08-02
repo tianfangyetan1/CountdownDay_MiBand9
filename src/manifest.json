@@ -9,9 +9,11 @@
     "watch"
   ],
   "features": [{
-      "name": "system.router"
-    }, {
-      "name": "system.storage"
+    "name": "system.router"
+  }, {
+    "name": "system.file"
+  }, {
+    "name": "system.vibrator"
   }],
   "config": {
     "logLevel": "log",
