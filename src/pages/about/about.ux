@@ -4,7 +4,7 @@
     <!-- 标题和时间 -->
     <div class="header">
       <text class="time">{{hours}}:{{minute}}</text>
-      <text class="title">关于进制转换</text>
+      <text class="title">关于倒数日</text>
     </div>
     
     <div class="sectionTitle">
@@ -19,17 +19,17 @@
       <text>天方夜谭</text>
     </div>
 
-    <div class="sectionTitle">
+    <!-- <div class="sectionTitle">
       <text class="sectionTitle-text">更新日志</text>
     </div>
 
     <div class="versionCode">
-      <text class="versionCode-text">v1.1</text>
+      <text class="versionCode-text"></text>
     </div>
 
     <div class="content">
-      <text>优化界面</text>
-    </div>
+      <text></text>
+    </div> -->
 
   </div>
 </template>
