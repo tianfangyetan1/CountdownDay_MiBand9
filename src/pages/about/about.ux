@@ -42,14 +42,17 @@ export default {
     minute: 0,
 
     // 当前目标日期
-    data: 'null'
+    data: 'null',
+
+    // 时间刷新定时器id
+    intervalId: null
   },
 
   // 设置时间刷新定时器
   onReady() {
     this.getData()
     this.refreshTime()
-    setInterval(() => {
+    this.intervalId = setInterval(() => {
       this.refreshTime()
     }, 1000)
   },
@@ -80,6 +83,11 @@ export default {
         this.data = 'null'
       }
     })
+  },
+
+  // 销毁定时器
+  onDestroy() {
+    clearInterval(this.intervalId)
   },
 }
 </script>

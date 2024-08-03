@@ -78,6 +78,11 @@ export default {
       this.refreshTime()
     }, 1000)
   },
+
+  // 销毁定时器
+  onDestroy() {
+    clearInterval(this.intervalId)
+  },
   
   // 刷新时间
   refreshTime() {
@@ -88,6 +93,10 @@ export default {
       this.minute = '0' + minute
     } else {
       this.minute = minute
+    }
+
+    if (now.getSeconds() == 0) {
+      global.runGC()
     }
 
     // 刷新倒数日时间
