@@ -49,16 +49,19 @@ export default {
   },
 
   // 设置时间刷新定时器
-  onShow() {
+  onReady() {
     this.getData()
-    this.refreshTime()
-    this.intervalId = setInterval(() => {
+
+    if (this.intervalId === null) {
       this.refreshTime()
-    }, 1000)
+      this.intervalId = setInterval(() => {
+        this.refreshTime()
+      }, 1000)
+    }
   },
 
   // 销毁定时器
-  onHide() {
+  onDestroy() {
     clearInterval(this.intervalId)
   },
 

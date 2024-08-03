@@ -49,6 +49,7 @@
 <script>
 import router from '@system.router'
 import file from '@system.file'
+import app from '@system.app'
 
 export default {
   private: {
@@ -71,8 +72,37 @@ export default {
     }
   },
 
+  // 设置时间刷新定时器
+  onReady() {
+    if (this.intervalId === null) {
+      this.refreshTime()
+      this.intervalId = setInterval(() => {
+        this.refreshTime()
+      }, 1000)
+    }
+  },
+
+  // 销毁定时器
+  onDestroy() {
+    clearInterval(this.intervalId)
+  },
+
+  // 获取数据
+  onShow() {
+    this.getData()
+  },
+
+  // 退出应用
+  onBackPress () {
+    clearInterval(this.intervalId)
+    app.terminate()
+    return true
+  },
+
   // 刷新时间
   refreshTime() {
+
+    // 刷新顶部时间
     const now = new Date()
     this.hours = now.getHours()
     const minute = now.getMinutes()
@@ -82,39 +112,18 @@ export default {
       this.minute = minute
     }
 
-    if (now.getSeconds() == 0) {
-      global.runGC()
-    }
-
     // 刷新倒数日时间
     const target = new Date(this.data)
     const milliseconds = target.getTime() - now.getTime()
 
-    let seconds = milliseconds / 1000
-    let minutes = seconds / 60
-    let hours = minutes / 60
+    const seconds = milliseconds / 1000
+    const minutes = seconds / 60
+    const hours = minutes / 60
 
     this.distace.day = parseInt(hours / 24)
     this.distace.hour = parseInt(hours) % 24
     this.distace.minute = parseInt(minutes) % 60
     this.distace.second = parseInt(seconds) % 60
-
-  },
-
-  // 销毁定时器
-  onHide() {
-    clearInterval(this.intervalId)
-  },
-
-  onShow() {
-    // 获取数据
-    this.getData()
-
-    // 设置时间刷新定时器
-    this.refreshTime()
-    this.intervalId = setInterval(() => {
-      this.refreshTime()
-    }, 1000)
   },
 
   // 从本地存储获取倒数日数据
