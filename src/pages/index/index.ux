@@ -71,19 +71,6 @@ export default {
     }
   },
 
-  // 设置时间刷新定时器
-  onReady() {
-    this.refreshTime()
-    this.intervalId = setInterval(() => {
-      this.refreshTime()
-    }, 1000)
-  },
-
-  // 销毁定时器
-  onDestroy() {
-    clearInterval(this.intervalId)
-  },
-  
   // 刷新时间
   refreshTime() {
     const now = new Date()
@@ -119,9 +106,15 @@ export default {
     clearInterval(this.intervalId)
   },
 
-  // 获取数据
   onShow() {
+    // 获取数据
     this.getData()
+
+    // 设置时间刷新定时器
+    this.refreshTime()
+    this.intervalId = setInterval(() => {
+      this.refreshTime()
+    }, 1000)
   },
 
   // 从本地存储获取倒数日数据

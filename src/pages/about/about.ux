@@ -49,12 +49,17 @@ export default {
   },
 
   // 设置时间刷新定时器
-  onReady() {
+  onShow() {
     this.getData()
     this.refreshTime()
     this.intervalId = setInterval(() => {
       this.refreshTime()
     }, 1000)
+  },
+
+  // 销毁定时器
+  onHide() {
+    clearInterval(this.intervalId)
   },
 
   // 刷新时间
@@ -83,12 +88,7 @@ export default {
         this.data = 'null'
       }
     })
-  },
-
-  // 销毁定时器
-  onHide() {
-    clearInterval(this.intervalId)
-  },
+  }
 }
 </script>
 
