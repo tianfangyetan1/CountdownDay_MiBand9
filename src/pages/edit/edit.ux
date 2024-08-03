@@ -38,16 +38,10 @@ import prompt from '@system.prompt'
 
 export default {
   private: {
-    // 时间
-    hours: 0,
-    minute: 0,
-
-    // 时间刷新计时器ID
-    intervalId: null,
-
     // 倒数日数据
     data: '',
 
+    // 按钮
     btns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
   },
 
@@ -65,26 +59,6 @@ export default {
       a.splice(10, 0, '\n')
       a.splice(13, 0, ':')
       return a.join('')
-    }
-  },
-
-  // 设置时间刷新定时器
-  onReady() {
-    this.refreshTime()
-    this.intervalId = setInterval(() => {
-      this.refreshTime()
-    }, 1000)
-  },
-  
-  // 刷新时间
-  refreshTime() {
-    const now = new Date()
-    this.hours = now.getHours()
-    const minute = now.getMinutes()
-    if (minute < 10) {
-      this.minute = '0' + minute
-    } else {
-      this.minute = minute
     }
   },
 
