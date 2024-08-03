@@ -34,6 +34,7 @@
 import vibrator from '@system.vibrator'
 import router from '@system.router'
 import file from '@system.file'
+import prompt from '@system.prompt'
 
 export default {
   private: {
@@ -54,20 +55,15 @@ export default {
     // 分隔字符
     splited () {
       let a = [...this.data]
-      // 1000/00/00 00:00
-      if (a.length >= 4) {
-        a.splice(4, 0, '/')
+      let l = a.length
+      for (let i = 0; i < 12 - l; i++) {
+        a.push('_')
       }
-      if (a.length >= 7) {
-        a.splice(7, 0, '/')
-      }
-      if (a.length >= 10) {
-        a.splice(10, 0, ' ')
-      }
-      if (a.length >= 13) {
-        a.splice(13, 0, ':')
-      }
-      // console.log(a)
+      console.log(a)
+      a.splice(4, 0, '/')
+      a.splice(7, 0, '/')
+      a.splice(10, 0, '\n')
+      a.splice(13, 0, ':')
       return a.join('')
     }
   },
@@ -116,6 +112,8 @@ export default {
 
   // 保存键被点击
   save () {
+
+    // 转换字符串格式
     let a = [...this.splited]
     a.splice(10, 1, 'T')
     a.push(':00')
@@ -124,6 +122,16 @@ export default {
 
     a = a.join('')
     console.log(a)
+
+    // 检验时间是否有效
+    const target = new Date(a)
+    if (target == 'Invalid Date') {
+      prompt.showToast({
+        message: '时间无效',
+        duration: 1000
+      })
+      return
+    }
 
     // 向本地存储保存倒数日数据
     file.writeText({
@@ -163,10 +171,6 @@ export default {
   color: #eeeeee;
 }
 
-.title {
-  font-size: 25px;
-}
-
 .layout {
   width: 192px;
   height: 120px;
@@ -174,7 +178,7 @@ export default {
   margin: 10px 0 5px 0;
   padding: 10px;
   border-radius: 10px;
-  /* font-size: 25px; */
+  font-size: 27px;
 }
 
 .footer {
