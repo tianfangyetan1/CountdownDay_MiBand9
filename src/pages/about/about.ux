@@ -1,49 +1,53 @@
 <template>
-  <div class="page">
 
-    <!-- 标题和时间 -->
-    <div class="header">
-      <text class="time">{{hours}}:{{minute}}</text>
-      <text class="title">关于倒数日</text>
+  <scroll scroll-y="{{true}}" class="scrool-page" bounces="{{true}}">
+    <div class="page">
+
+      <!-- 标题和时间 -->
+      <div class="header">
+        <text class="time">{{hours}}:{{minute}}</text>
+        <text class="title">关于倒数日</text>
+      </div>
+      
+      <text class="sectionTitle">当前目标时间</text>
+
+      <text class="content">{{data}}</text>
+
+      <text class="sectionTitle">开发者</text>
+
+      <div class="avatar">
+        <image static src="/common/avatar.jpg"></image>
+      </div>
+
+      <text class="content">天方夜谭</text>
+
+      <text class="sectionTitle">更新日志</text>
+
+      <text class="versionCode">v1.1</text>
+
+      <text class="versionDscribe">优化编辑界面</text>
+      <text class="versionDscribe">添加错误格式提示</text>
+
     </div>
-    
-    <div class="sectionTitle">
-      <text class="sectionTitle-text">开发者</text>
-    </div>
-
-    <div class="avatar">
-      <image static src="/common/avatar.jpg"></image>
-    </div>
-
-    <div class="content">
-      <text>天方夜谭</text>
-    </div>
-
-    <!-- <div class="sectionTitle">
-      <text class="sectionTitle-text">更新日志</text>
-    </div>
-
-    <div class="versionCode">
-      <text class="versionCode-text"></text>
-    </div>
-
-    <div class="content">
-      <text></text>
-    </div> -->
-
-  </div>
+  </scroll>
 </template>
 
 <script>
+import file from '@system.file'
+
 export default {
   private: {
     // 时间
     hours: 0,
     minute: 0,
+
+    // 当前目标日期
+    data: 'null'
   },
 
   // 设置时间刷新定时器
   onReady() {
+    this.getData()
     this.refreshTime()
     setInterval(() => {
       this.refreshTime()
@@ -62,18 +66,36 @@ export default {
     }
     time = null
   },
+
+  // 从本地存储获取倒数日数据
+  getData () {
+    file.readText({
+      uri: 'internal://files/appdata.txt',
+      success: (data) => {
+        console.log('读取成功', data.text)
+        this.data = data.text.replace('T', '\n')
+      },
+      fail: (data, code) => {
+        console.log('读取失败', code, data)
+        this.data = 'null'
+      }
+    })
+  },
 }
 </script>
 
 <style>
+.scrool-page {
+  width: 192px;
+  height: 490px;
+}
+
 .page {
   flex-direction: column;
   width: 192px;
-  height: 490px;
+  height: 650px;
   margin: 0;
-  padding: 0;
   padding-bottom: 10px;
-  overflow: hidden;
 }
 
 .header {
@@ -97,27 +119,30 @@ export default {
   margin: 5px;
 }
 
-.content, .versionCode {
+.sectionTitle, .content, .versionCode {
   width: 182px;
-  margin: 5px;
+  padding: 5px;
 }
 
 .sectionTitle {
-  margin: 20px 5px 5px 5px;
+  margin-top: 15px;
   color: #0085A6;
-}
-
-.sectionTitle text {
   font-size: 20px;
 }
 
-.content text {
+.content {
   font-size: 22px;
 }
 
-.versionCode-text {
+.versionCode {
   font-size: 18px;
   color: #b0b0b0;
+}
+
+.versionDscribe {
+  width: 182px;
+  padding: 2px 5px;
+  font-size: 22px;
 }
 
 </style>
