@@ -16,4 +16,4 @@
 
 - [页面基准宽度](https://github.com/tianfangyetan1/NumberSystems_MiBand9?tab=readme-ov-file#%E9%A1%B5%E9%9D%A2%E5%9F%BA%E5%87%86%E5%AE%BD%E5%BA%A6)
 
-- [openssl 安装](https://github.com/tianfangyetan1/NumberSystems_MiBand9?tab=readme-ov-file#%E5%85%B3%E4%BA%8E-openssl)
+- [OpenSSL 安装](https://github.com/tianfangyetan1/NumberSystems_MiBand9?tab=readme-ov-file#%E5%85%B3%E4%BA%8E-openssl)
