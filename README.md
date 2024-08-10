@@ -12,8 +12,8 @@
 
 ### 通用注意事项
 
-- [模拟器使用](https://github.com/tianfangyetan1/NumberSystems_MiBand9?tab=readme-ov-file#%E6%A8%A1%E6%8B%9F%E5%99%A8%E4%BD%BF%E7%94%A8)
+- [模拟器使用](https://github.com/tianfangyetan1/BaseConverter_MiBand9?tab=readme-ov-file#模拟器使用)
 
-- [页面基准宽度](https://github.com/tianfangyetan1/NumberSystems_MiBand9?tab=readme-ov-file#%E9%A1%B5%E9%9D%A2%E5%9F%BA%E5%87%86%E5%AE%BD%E5%BA%A6)
+- [页面基准宽度](https://github.com/tianfangyetan1/BaseConverter_MiBand9?tab=readme-ov-file#页面基准宽度)
 
-- [OpenSSL 安装](https://github.com/tianfangyetan1/NumberSystems_MiBand9?tab=readme-ov-file#%E5%85%B3%E4%BA%8E-openssl)
+- [OpenSSL 安装](https://github.com/tianfangyetan1/BaseConverter_MiBand9?tab=readme-ov-file#关于-openssl)
